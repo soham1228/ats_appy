@@ -1,0 +1,20 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+venv/
+ENV/
+
+# Browser profiles & session caches
+data/browser_profile/
+
+# Generated and temporary resumes
+data/generated_resumes/*.pdf
+data/uploaded_resume.pdf
+!data/generated_resumes/.gitkeep
+
+# OS specific files
+.DS_Store
+Thumbs.db

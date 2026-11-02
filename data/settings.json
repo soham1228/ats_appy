@@ -1,0 +1,40 @@
+{
+  "supervised_mode": true,
+  "browser_type": "chromium",
+  "headless": false,
+  "stealth_delays": true,
+  "typing_delay_ms": 75,
+  "action_delay_seconds": 1.5,
+  "daily_application_limit": 25,
+  "ats_threshold_score": 75,
+  "ai_provider": "builtin",
+  "ai_api_key": "",
+  "ai_model": "gpt-4o-mini",
+  "ollama_url": "http://localhost:11434",
+  "connected_platforms": {
+    "linkedin": {
+      "enabled": true,
+      "status": "Ready"
+    },
+    "indeed": {
+      "enabled": true,
+      "status": "Ready"
+    },
+    "greenhouse": {
+      "enabled": true,
+      "status": "Ready"
+    },
+    "lever": {
+      "enabled": true,
+      "status": "Ready"
+    },
+    "wellfound": {
+      "enabled": true,
+      "status": "Ready"
+    },
+    "workday": {
+      "enabled": true,
+      "status": "Ready"
+    }
+  }
+}

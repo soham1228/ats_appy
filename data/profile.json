@@ -1,0 +1,145 @@
+{
+  "personal": {
+    "full_name": "Soham Shukla",
+    "email": "shuklasoham2812@gmail.com",
+    "phone": "7990741519",
+    "location": "Vadodara, Gujarat",
+    "linkedin": "https://www.linkedin.com/in/soham-shukla-8bb783298",
+    "github": "https://github.com/soham1228",
+    "portfolio": ""
+  },
+  "headline": "Software Developer & Creative Technologist | Full-Stack, AI Automation & Mobile Systems",
+  "summary": "Software Developer and Creative Technologist passionate about building intelligent, user-centered solutions through code and design. Skilled in full-stack development, AI automation, and voice technologies with a strong foundation in both technical implementation and creative problem-solving. Proven ability to transform ideas into production-ready applications, collaborating effectively across teams to deliver impactful digital experiences.",
+  "skills": {
+    "Languages": [
+      "Python",
+      "JavaScript",
+      "SQL",
+      "PHP",
+      "HTML & CSS",
+      "Dart"
+    ],
+    "Frameworks & Libraries": [
+      "React.js",
+      "React Native",
+      "Node.js",
+      "Flask",
+      "Flutter",
+      "Appium",
+      "MUI"
+    ],
+    "Cloud & DevOps": [
+      "Git",
+      "GitHub",
+      "Postman",
+      "Selenium",
+      "Docker",
+      "RESTful APIs"
+    ],
+    "Tools & Methodologies": [
+      "Figma",
+      "Android Studio",
+      "Canva",
+      "Adobe Photoshop",
+      "Photopea",
+      "Midjourney",
+      "Voice Assistant Development",
+      "Android Automation",
+      "Natural Language Processing",
+      "UI/UX Design"
+    ]
+  },
+  "experiences": [
+    {
+      "id": "exp-1",
+      "title": "Software Developer",
+      "company": "Clentra Web Services",
+      "location": "Vadodara, Gujarat",
+      "start_date": "Nov 2025",
+      "end_date": "Present",
+      "bullets": [
+        "Managed and updated company e-commerce platform using WordPress, focusing on user experience, design optimization, and high responsiveness.",
+        "Designed promotional banners, visual assets, and marketing collateral supporting brand positioning and conversion rates.",
+        "Published technical and SEO-optimized content to increase organic web visibility and search rankings."
+      ]
+    },
+    {
+      "id": "exp-2",
+      "title": "Graphic Designer & Generative AI Intern",
+      "company": "Afnan Studios",
+      "location": "Vadodara, Gujarat",
+      "start_date": "Jun 2025",
+      "end_date": "Nov 2025",
+      "bullets": [
+        "Dualzo (AI Code Governance): Engineered an autonomous pipeline converting natural language GitHub issues into verified pull requests using Claude, OpenAI, and Gemini.",
+        "Shutrix Platform & Album Studio: Architected cross-platform React and React Native apps with an in-browser PSD rendering engine for real-time album editing.",
+        "Template Systems & Asset Pipelines: Engineered reusable layout schemas and canvas rendering pipelines to bridge UI designs into performant web components.",
+        "High-Throughput Media APIs: Developed native bridges, client management modules, and resilient REST endpoints for high-resolution asset uploads."
+      ]
+    },
+    {
+      "id": "exp-3",
+      "title": "Software Developer Intern",
+      "company": "Arctikcircle",
+      "location": "Vadodara, Gujarat",
+      "start_date": "Jan 2025",
+      "end_date": "Apr 2025",
+      "bullets": [
+        "Engineered an AI-powered voice assistant and hands-free Android automation system using Python, Flask, Appium, and ADB.",
+        "Automated multi-app touch gestures, UI flows, messaging, and system accessibility workflows.",
+        "Designed digital artwork concepts using generative AI and creative principles, accelerating design production.",
+        "Collaborated with cross-functional teams to integrate automation features into mobile app ecosystems."
+      ]
+    },
+    {
+      "id": "exp-4",
+      "title": "Graphic Designer Intern",
+      "company": "The Wall of Dreams",
+      "location": "Vadodara, Gujarat",
+      "start_date": "May 2024",
+      "end_date": "Nov 2024",
+      "bullets": [
+        "Created engaging visual assets, digital illustrations, and typography for brand marketing and client campaigns.",
+        "Collaborated with design leads to conceptualize promotional graphics and interactive media."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Dualzo – AI Code Governance & Orchestration Platform",
+      "description": "Autonomous code delivery pipeline converting GitHub issues into verified pull requests with Claude, OpenAI, Gemini, sandboxed validation, and multi-channel team approvals."
+    },
+    {
+      "name": "Shutrix – Photography Platform & Album Studio",
+      "description": "Cross-platform React and React Native suite with an in-browser PSD engine and renderer for real-time digital photo album creation."
+    },
+    {
+      "name": "Gladdy.in – Financial Trading Mobile Application",
+      "description": "High-performance trading mobile app with React Native CLI, low-latency WebSockets, real-time price feeds, and dynamic order tracking."
+    },
+    {
+      "name": "JustWow Tourism – Mobile Travel Application",
+      "description": "Cross-platform mobile travel companion with offline-first itinerary caching, secure auth, and payment gateway integration."
+    },
+    {
+      "name": "Voice Assistant with Android Automation",
+      "description": "Hands-free OS-level automation system using Python, Flask, Appium, and ADB translating speech commands into multi-app touch gestures."
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor of Computer Science Engineering",
+      "institution": "Neotech Institute of Technology (affiliated with GTU)",
+      "graduation_year": "2021 - 2025"
+    },
+    {
+      "degree": "Higher Secondary and Senior Secondary",
+      "institution": "Kendriya Vidyalaya | Gujarat",
+      "graduation_year": "2019 - 2021"
+    }
+  ],
+  "certifications": [
+    "2x Gold Medalist in College Science Fest",
+    "Pre-finalist for Google Hackathon (in collaboration with Nudge University & Hack2skills)"
+  ]
+}

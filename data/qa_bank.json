@@ -1,0 +1,28 @@
+{
+  "work_authorization": "Yes, authorized to work",
+  "visa_sponsorship_needed": "No",
+  "notice_period": "Immediate / 2 weeks",
+  "years_of_experience": "3+",
+  "current_salary": "Negotiable",
+  "expected_salary": "Negotiable / Competitive",
+  "willing_to_relocate": "Open to discussion / Remote preferred",
+  "skills_years": {
+    "Python": "3",
+    "React.js": "3",
+    "React Native": "3",
+    "JavaScript": "3",
+    "Flask": "2",
+    "Flutter": "2",
+    "Appium": "2",
+    "SQL": "3",
+    "Git": "3",
+    "Docker": "2"
+  },
+  "custom_answers": {
+    "Are you legally authorized to work in the country where this job is located?": "Yes",
+    "Will you now or in the future require sponsorship for employment visa status?": "No",
+    "Have you previously worked for our company?": "No",
+    "How did you hear about this opportunity?": "Job Board",
+    "What is your highest level of education completed?": "Bachelor of Computer Science Engineering"
+  }
+}
