@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareerCopilot – AI ATS Tailor & Supervised Job Application Bot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=3.1">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>CareerCopilot</h1>
+          <span>ATS Tailor & Auto-Apply</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="studio">
+          <span class="icon">🚀</span> Auto-Apply Studio
+        </button>
+        <button class="nav-item" data-tab="preview">
+          <span class="icon">📄</span> ATS CV & Cover Letter
+        </button>
+        <button class="nav-item" data-tab="profile">
+          <span class="icon">👤</span> Master Profile
+        </button>
+        <button class="nav-item" data-tab="qabank">
+          <span class="icon">❓</span> Screening QA Bank
+        </button>
+        <button class="nav-item" data-tab="tracker">
+          <span class="icon">📊</span> Applications Tracker
+        </button>
+        <button class="nav-item" data-tab="accounts">
+          <span class="icon">⚙️</span> AI & Accounts
+        </button>
+      </nav>
+
+      <div class="bot-badge-container">
+        <div class="bot-status-pill">
+          <span class="pulse-dot"></span>
+          <span id="botGlobalStatus">Supervised Bot: Ready</span>
+        </div>
+        <p class="bot-subtext">Safe human-in-the-loop review mode active.</p>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h2 id="sectionTitle">Auto-Apply Studio</h2>
+          <p id="sectionDesc">Paste job descriptions, maximize ATS keyword match, and auto-fill applications safely.</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-secondary btn-sm" id="btnToggleConsole">
+            <span>💻</span> Live Console (<span id="logCount">0</span>)
+          </button>
+          <a href="/api/download-resume/latest" id="topLatestPdfLink" class="btn btn-outline btn-sm hidden" target="_blank">
+            <span>📥</span> Download Latest PDF
+          </a>
+        </div>
+      </header>
+
+      <!-- TAB 1: Auto-Apply Studio -->
+      <section id="tab-studio" class="tab-pane active">
+        <div class="grid-2col">
+          <!-- Left Column: Input Form -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <h3>1. Target Job Details</h3>
+              <span class="badge badge-accent">Step 1</span>
+            </div>
+
+            <!-- URL Scraper Input -->
+            <div class="url-scrape-box">
+              <div class="flex-between">
+                <label>Extract from Job URL</label>
+                <span class="platform-tag" id="detectedPlatformBadge">🌐 Auto-Detect Platform</span>
+              </div>
+              <div class="input-with-button">
+                <input type="text" id="jobUrlInput" placeholder="Paste LinkedIn, Indeed, Greenhouse, Lever, or Wellfound URL..." />
+                <button class="btn btn-secondary" id="btnScrapeUrl">
+                  <span class="btn-text">Fetch JD</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label>Job Title / Role</label>
+                <input type="text" id="roleTitleInput" placeholder="e.g. Senior Software Engineer" />
+              </div>
+              <div class="form-group flex-1">
+                <label>Company Name</label>
+                <input type="text" id="companyInput" placeholder="e.g. Acme Corp" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="label-with-hint">
+                <label>Job Description (JD)</label>
+                <button class="text-btn" id="btnLoadSampleJD">Load Sample High-Tech JD</button>
+              </div>
+              <textarea id="jdTextInput" rows="9" placeholder="Paste the full job requirements, qualifications, and responsibilities here..."></textarea>
+            </div>
+
+            <div class="engine-status-bar" id="activeEngineStatusBar">
+              <span class="engine-badge-icon">⚡</span>
+              <span id="activeEngineLabel">Tailoring Engine: Smart Built-in Optimizer</span>
+              <a href="#" class="switch-engine-link" id="btnSwitchEngine">Change in AI Settings →</a>
+            </div>
+
+            <div class="card-actions">
+              <button class="btn btn-secondary" id="btnAnalyzeOnly">
+                <span>🔍</span> Check ATS Score
+              </button>
+              <button class="btn btn-primary" id="btnTailorAndGenerate">
+                <span>✨</span> Optimize & Generate ATS CV
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: ATS Match & Action Console -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <h3>2. ATS Score & Bot Dispatch</h3>
+              <span class="badge badge-info" id="atsStatusBadge">Awaiting Analysis</span>
+            </div>
+
+            <!-- Match Score Meter -->
+            <div class="score-meters-container">
+              <div class="meter-box">
+                <div class="meter-label">Initial Match</div>
+                <div class="radial-score" id="initialScoreDial">
+                  <span class="score-number" id="initialScoreVal">--%</span>
+                </div>
+                <div class="meter-sub">Before tailoring</div>
+              </div>
+
+              <div class="arrow-divider">➔</div>
+
+              <div class="meter-box highlighted">
+                <div class="meter-label">ATS Optimized Match</div>
+                <div class="radial-score accent" id="optimizedScoreDial">
+                  <span class="score-number" id="optimizedScoreVal">--%</span>
+                </div>
+                <div class="meter-sub">Tailored CV score</div>
+              </div>
+            </div>
+
+            <!-- Keywords Breakdown -->
+            <div class="keywords-analysis-box">
+              <div class="kw-header">
+                <strong>Matched Keywords (<span id="matchedKwCount">0</span>)</strong>
+              </div>
+              <div class="tags-cloud" id="matchedKwTags">
+                <span class="placeholder-text">Run analysis or paste JD to see matching skills.</span>
+              </div>
+
+              <div class="kw-header mt-3">
+                <strong>Missing High-Priority Keywords (<span id="missingKwCount">0</span>)</strong>
+              </div>
+              <div class="tags-cloud missing" id="missingKwTags">
+                <span class="placeholder-text">Missing skills will appear here.</span>
+              </div>
+            </div>
+
+            <!-- Supervised Bot Trigger Box -->
+            <div class="supervised-action-box">
+              <h4>3. Supervised Auto-Apply</h4>
+              <p>The bot launches a persistent browser, fills all screening fields, uploads the tailored PDF, and stops at the final review screen for your 1-click confirmation.</p>
+
+              <div class="bot-buttons-row">
+                <button class="btn btn-success" id="btnLaunchSupervised" disabled>
+                  <span>🤖</span> Launch Supervised Bot
+                </button>
+                <button class="btn btn-warning hidden" id="btnConfirmSubmit">
+                  <span>✅</span> Confirm & Submit Application
+                </button>
+                <button class="btn btn-danger hidden" id="btnCloseBrowser">
+                  <span>⏹</span> Close Browser
+                </button>
+              </div>
+
+              <div class="active-job-indicator" id="activeJobIndicator">
+                <span class="icon">ℹ️</span>
+                <span id="activeJobNotice">Tailor your CV above to unlock the Supervised Bot.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Streaming Terminal / Log Box -->
+        <div class="card glass-card mt-4" id="consoleCard">
+          <div class="card-header">
+            <h3>⚡ Live Automation Activity Stream</h3>
+            <div class="header-tools">
+              <button class="text-btn" id="btnClearLogs">Clear Log</button>
+            </div>
+          </div>
+          <div class="terminal-window" id="terminalWindow">
+            <div class="term-line info"><span class="t-time">[00:00:00]</span> [SYSTEM] CareerCopilot engine initialized. Ready for job analysis.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: ATS CV & Cover Letter Preview -->
+      <section id="tab-preview" class="tab-pane">
+        <div class="preview-layout">
+          <!-- Controls Bar -->
+          <div class="preview-toolbar">
+            <div class="subtabs">
+              <button class="subtab-btn active" data-subtab="resumeView">ATS Resume View</button>
+              <button class="subtab-btn" data-subtab="coverLetterView">Tailored Cover Letter</button>
+            </div>
+            <div class="toolbar-actions">
+              <a href="#" id="btnDownloadPdf" class="btn btn-primary btn-sm" target="_blank" download>
+                <span>📥</span> Download ATS-Compliant PDF
+              </a>
+            </div>
+          </div>
+
+          <!-- Document Render Area -->
+          <div class="paper-container" id="resumeView">
+            <div class="ats-document" id="atsDocSheet">
+              <div class="ats-header">
+                <h1 id="docName">Alex Mercer</h1>
+                <div class="ats-contact" id="docContact">
+                  alex.mercer.dev@example.com | +1 (555) 234-5678 | San Francisco, CA | linkedin.com/in/alex-mercer
+                </div>
+                <div class="ats-divider"></div>
+              </div>
+
+              <div class="ats-section">
+                <h2 class="ats-section-title">PROFESSIONAL SUMMARY</h2>
+                <div class="ats-divider-sub"></div>
+                <p id="docSummary">Senior Full-Stack & Python Software Engineer with 5+ years of experience architecting high-scale distributed systems and cloud platforms.</p>
+              </div>
+
+              <div class="ats-section">
+                <h2 class="ats-section-title">TECHNICAL SKILLS & CORE COMPETENCIES</h2>
+                <div class="ats-divider-sub"></div>
+                <div id="docSkills">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <div class="ats-section">
+                <h2 class="ats-section-title">PROFESSIONAL EXPERIENCE</h2>
+                <div class="ats-divider-sub"></div>
+                <div id="docExperiences">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <div class="ats-section">
+                <h2 class="ats-section-title">EDUCATION</h2>
+                <div class="ats-divider-sub"></div>
+                <div id="docEducation">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <div class="ats-section">
+                <h2 class="ats-section-title">CERTIFICATIONS</h2>
+                <div class="ats-divider-sub"></div>
+                <div id="docCertifications">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cover Letter Pane -->
+          <div class="paper-container hidden" id="coverLetterView">
+            <div class="ats-document">
+              <div class="cl-header">
+                <h2 class="ats-section-title">TAILORED COVER LETTER</h2>
+                <button class="btn btn-secondary btn-sm" id="btnCopyCoverLetter">📋 Copy Text</button>
+              </div>
+              <textarea id="coverLetterText" class="cover-letter-textarea" rows="18"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: Master Profile -->
+      <section id="tab-profile" class="tab-pane">
+        <div class="card glass-card">
+          <div class="card-header">
+            <h3>Master Profile & Career Repository</h3>
+            <button class="btn btn-primary btn-sm" id="btnSaveProfile">💾 Save Profile</button>
+          </div>
+          <p class="hint-text">This profile is your single source of truth. The ATS engine pulls your real achievements and tailors them specifically for each job description.</p>
+
+          <!-- 1-Click Profile Importer (Resume PDF + LinkedIn + Paste Text) -->
+          <div class="import-banner mt-3">
+            <div class="import-card">
+              <div class="import-card-header">
+                <span class="import-icon">📄</span>
+                <div>
+                  <h4>Upload Your Original Resume (PDF)</h4>
+                  <p>Choose your PDF resume or drag and drop it below. We extract your history, skills, and contact info.</p>
+                </div>
+              </div>
+              <div class="dropzone-box mt-2" id="resumeDropzone">
+                <input type="file" id="resumeFileInput" accept=".pdf,application/pdf" class="file-picker-input" />
+                <div class="file-status-bar mt-2">
+                  <span id="resumeFileSelectedName" class="file-status-text">Select your PDF resume above</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="import-card">
+              <div class="import-card-header">
+                <span class="import-icon">💼</span>
+                <div>
+                  <h4>Import from LinkedIn / Paste Text</h4>
+                  <p>Fetch directly via LinkedIn URL, or paste your resume/LinkedIn text below.</p>
+                </div>
+              </div>
+              <div class="input-with-button mt-2">
+                <input type="text" id="linkedinImportUrl" placeholder="https://www.linkedin.com/in/your-profile" />
+                <button class="btn btn-accent btn-sm" id="btnImportLinkedin">
+                  <span>⚡</span> Fetch Profile
+                </button>
+              </div>
+              <div class="mt-2">
+                <textarea id="pasteResumeTextInput" rows="2" placeholder="...or paste your resume text here directly and click Parse" class="paste-text-input"></textarea>
+                <button type="button" class="btn btn-secondary btn-xs mt-1" id="btnParsePastedText">📋 Parse Pasted Text</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+          <h4 class="mt-2">Candidate Details</h4>
+
+          <div class="form-grid mt-4">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="profFullName" />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="profEmail" />
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="text" id="profPhone" />
+            </div>
+            <div class="form-group">
+              <label>Location & Work Preference</label>
+              <input type="text" id="profLocation" />
+            </div>
+            <div class="form-group">
+              <label>LinkedIn URL</label>
+              <input type="text" id="profLinkedin" />
+            </div>
+            <div class="form-group">
+              <label>GitHub URL</label>
+              <input type="text" id="profGithub" />
+            </div>
+          </div>
+
+          <div class="form-group mt-3">
+            <label>Master Headline</label>
+            <input type="text" id="profHeadline" />
+          </div>
+
+          <div class="form-group">
+            <label>Master Professional Summary</label>
+            <textarea id="profSummary" rows="4"></textarea>
+          </div>
+
+          <div class="section-divider"></div>
+          <h4>Technical Skills by Category (Comma separated)</h4>
+          <div class="form-grid mt-2" id="profileSkillsContainer">
+            <!-- Injected via JS -->
+          </div>
+
+          <div class="section-divider"></div>
+          <div class="flex-between">
+            <h4>Work Experiences</h4>
+          </div>
+          <div id="profileExperiencesContainer" class="mt-3">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: Screening QA Bank -->
+      <section id="tab-qabank" class="tab-pane">
+        <div class="card glass-card">
+          <div class="card-header">
+            <h3>Screening Questions & Application Defaults</h3>
+            <button class="btn btn-primary btn-sm" id="btnSaveQABank">💾 Save QA Bank</button>
+          </div>
+          <p class="hint-text">The bot automatically fills common screening and filter questions using these answers.</p>
+
+          <div class="form-grid mt-4">
+            <div class="form-group">
+              <label>Legally Authorized to Work?</label>
+              <input type="text" id="qaWorkAuth" />
+            </div>
+            <div class="form-group">
+              <label>Require Visa Sponsorship?</label>
+              <input type="text" id="qaSponsorship" />
+            </div>
+            <div class="form-group">
+              <label>Notice Period</label>
+              <input type="text" id="qaNotice" />
+            </div>
+            <div class="form-group">
+              <label>Overall Years of Experience</label>
+              <input type="text" id="qaYearsExp" />
+            </div>
+            <div class="form-group">
+              <label>Target / Expected Compensation</label>
+              <input type="text" id="qaSalary" />
+            </div>
+            <div class="form-group">
+              <label>Willing to Relocate / Remote</label>
+              <input type="text" id="qaRelocate" />
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+          <h4>Years of Experience by Skill</h4>
+          <p class="hint-text">Used when application forms ask: "How many years of work experience do you have with [Skill]?"</p>
+          <div class="skills-years-grid mt-3" id="skillsYearsGrid">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: Applications Tracker -->
+      <section id="tab-tracker" class="tab-pane">
+        <div class="card glass-card">
+          <div class="card-header">
+            <h3>Applications & Tailored CV History</h3>
+            <span class="badge badge-info" id="trackerCountBadge">0 Applications</span>
+          </div>
+
+          <div class="table-container mt-3">
+            <table class="data-table" id="applicationsTable">
+              <thead>
+                <tr>
+                  <th>Job Title & Company</th>
+                  <th>Date</th>
+                  <th>Initial Match</th>
+                  <th>Optimized Match</th>
+                  <th>Status</th>
+                  <th>Tailored Resume</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="applicationsTbody">
+                <tr>
+                  <td colspan="7" class="text-center py-4">No applications tracked yet. Tailor your first job in the Studio!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: AI Engine & Connected Accounts -->
+      <section id="tab-accounts" class="tab-pane">
+        <div class="grid-2col">
+          <!-- AI Engine Settings -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <h3>🤖 AI Resume Tailoring Engine</h3>
+              <button class="btn btn-primary btn-sm" id="btnSaveAISettings">💾 Save AI Settings</button>
+            </div>
+            <p class="hint-text">Configure which AI model rewrites your resume bullets and crafts custom cover letters tailored directly to each job description.</p>
+
+            <div class="form-group mt-3">
+              <label>AI Provider</label>
+              <select id="aiProviderSelect" class="form-select">
+                <option value="builtin">⚡ Smart Built-in Optimizer (Fast, Free, No API Key needed)</option>
+                <option value="openai">🧠 OpenAI (GPT-4o / GPT-4o-mini)</option>
+                <option value="gemini">✨ Google Gemini (Gemini 1.5 Flash)</option>
+                <option value="ollama">🦙 Ollama (Local Private LLM, e.g. Llama 3)</option>
+              </select>
+            </div>
+
+            <div class="form-group mt-3" id="aiApiKeyGroup">
+              <label>API Key</label>
+              <div class="input-with-button">
+                <input type="password" id="aiApiKeyInput" placeholder="sk-..." />
+                <button type="button" class="btn btn-secondary btn-sm" id="btnToggleApiKey">👁️</button>
+              </div>
+              <span class="field-subtext">Keys are stored locally on your machine in data/settings.json and never shared.</span>
+            </div>
+
+            <div class="form-group mt-3" id="aiModelGroup">
+              <label>Model Name</label>
+              <input type="text" id="aiModelInput" value="gpt-4o-mini" placeholder="gpt-4o-mini / gemini-1.5-flash / llama3" />
+            </div>
+
+            <div class="form-group mt-3 hidden" id="ollamaUrlGroup">
+              <label>Ollama Server Endpoint</label>
+              <input type="text" id="ollamaUrlInput" value="http://localhost:11434" />
+            </div>
+          </div>
+
+          <!-- Connected Job Platforms -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <h3>🌐 Connected Job Accounts</h3>
+              <span class="badge badge-accent">Persistent Browser</span>
+            </div>
+            <p class="hint-text">Log in once to your job accounts. The bot uses a persistent Chromium profile so your login sessions, cookies, and 2FA remain active indefinitely.</p>
+
+            <div class="accounts-grid mt-3">
+              <!-- LinkedIn -->
+              <div class="account-card">
+                <div class="account-info">
+                  <span class="account-icon">💼</span>
+                  <div>
+                    <h5>LinkedIn</h5>
+                    <span class="account-tag">Easy Apply & Postings</span>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-xs btnPlatformLogin" data-platform="linkedin">🔑 Launch & Log In</button>
+              </div>
+
+              <!-- Indeed -->
+              <div class="account-card">
+                <div class="account-info">
+                  <span class="account-icon">🎯</span>
+                  <div>
+                    <h5>Indeed</h5>
+                    <span class="account-tag">Indeed Apply Portal</span>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-xs btnPlatformLogin" data-platform="indeed">🔑 Launch & Log In</button>
+              </div>
+
+              <!-- Greenhouse -->
+              <div class="account-card">
+                <div class="account-info">
+                  <span class="account-icon">🏢</span>
+                  <div>
+                    <h5>Greenhouse</h5>
+                    <span class="account-tag">Tech & Startup Boards</span>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-xs btnPlatformLogin" data-platform="greenhouse">🔑 Launch & Log In</button>
+              </div>
+
+              <!-- Lever -->
+              <div class="account-card">
+                <div class="account-info">
+                  <span class="account-icon">⚙️</span>
+                  <div>
+                    <h5>Lever</h5>
+                    <span class="account-tag">Direct ATS Applications</span>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-xs btnPlatformLogin" data-platform="lever">🔑 Launch & Log In</button>
+              </div>
+
+              <!-- Wellfound -->
+              <div class="account-card">
+                <div class="account-info">
+                  <span class="account-icon">🦄</span>
+                  <div>
+                    <h5>Wellfound</h5>
+                    <span class="account-tag">AngelList Startup Jobs</span>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-xs btnPlatformLogin" data-platform="wellfound">🔑 Launch & Log In</button>
+              </div>
+
+              <!-- Workday -->
+              <div class="account-card">
+                <div class="account-info">
+                  <span class="account-icon">🌐</span>
+                  <div>
+                    <h5>Workday</h5>
+                    <span class="account-tag">Enterprise Portals</span>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-xs btnPlatformLogin" data-platform="workday">🔑 Launch & Log In</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/js/app.js?v=3.1"></script>
+</body>
+</html>
